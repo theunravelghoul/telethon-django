@@ -21,7 +21,7 @@ class DjangoSession(MemorySession):
             self._dc_id = session.dc_id
             self._server_address = session.server_address
             self._port = session.port
-            self._auth_key = AuthKey(session.auth_key)
+            self._auth_key = AuthKey(session.auth_key.tobytes())
 
     def clone(self, to_instance=None):
         return super().clone(MemorySession())
@@ -32,7 +32,7 @@ class DjangoSession(MemorySession):
 
         session = models.Session.objects.filter(session_id=self.session_id).first()
         if session and session.auth_key:
-            self._auth_key = AuthKey(data=session.auth_key)
+            self._auth_key = AuthKey(data=session.auth_key.tobytes())
         else:
             self._auth_key = None
 
